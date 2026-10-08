@@ -8,7 +8,7 @@ num_samples = 1000
 x_train = np.random.uniform(low=0, high=10, size=(num_samples, 1))
 t_train = np.random.uniform(low=0, high=10, size=(num_samples, 1))
 
-# onde E et B en phase
+# electromagnetic waves E and B in phase
 E_exact = np.sin(x_train - t_train)
 B_exact = np.sin(x_train - t_train)
 
@@ -35,7 +35,7 @@ class MaxwellPINN(tf.keras.Model):
         return output
 
 
-# la loss de Maxwell-Lorentz
+# loss func of Maxwell-Lorentz
 def physics_loss(model, x, t):
     with tf.GradientTape(persistent=True) as tape:
         tape.watch(x)
@@ -67,17 +67,17 @@ num_epochs = 1000
 
 for epoch in range(num_epochs):
     with tf.GradientTape() as tape:
-        loss_physique = physics_loss(model, x_train_tf, t_train_tf)
+        physic_loss = physics_loss(model, x_train_tf, t_train_tf)
         predictions = model(input_train)
-        loss_donnees = tf.reduce_mean(tf.square(predictions - u_exact_tf))
-        total_loss = loss_physique + loss_donnees
+        loss_datas = tf.reduce_mean(tf.square(predictions - u_exact_tf))
+        total_loss = physic_loss + loss_datas
 
-    # calcul des grad
+    # grad compute
     gradients = tape.gradient(total_loss, model.trainable_variables)
     optimizer.apply_gradients(zip(gradients, model.trainable_variables))
 
     if epoch % 100 == 0:
-        print(f"Epoch {epoch}/{num_epochs} | Total: {total_loss:.5f} | Physique: {loss_physique:.5f} | Données: {loss_donnees:.5f}")
+        print(f"Epoch {epoch}/{num_epochs} | Total: {total_loss:.5f} | Physic: {physic_loss:.5f} | Datas: {loss_datas:.5f}")
 
 x_test = np.linspace(0, 10, 100).reshape(-1, 1)
 t_test = np.linspace(0, 10, 100).reshape(-1, 1)
@@ -91,9 +91,9 @@ E_pred = pred_test[:, 0]
 B_pred = pred_test[:, 1]
 E_exact_test = np.sin(x_test - t_test).flatten()
 
-# MSE sur le champ E
+# MSE on E
 mse_E = tf.reduce_mean(tf.square(E_exact_test - E_pred))
-print(f"\nTest MSE (Champ E): {mse_E.numpy():.6f}")
+print(f"\nMSE test: {mse_E.numpy():.6f}")
 
 
 def predict_cpp(x_val: float, t_val: float):
