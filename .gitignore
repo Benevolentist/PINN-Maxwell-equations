@@ -1,0 +1,10 @@
+.env
+.venv
+shipper.sh
+__pycache__/
+*.pyc
+*.so
+build/
+dist/
+*.egg-info/
+.pytest_cache/
