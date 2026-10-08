@@ -35,3 +35,11 @@ After training for 1000 epochs, the network demonstrates excellent convergence, 
 * **Final Physics Loss:** `~0.0008` (The NN successfully learned the PDE)
 * **Final Data Loss:** `~0.0071`
 * **Test MSE on E field:** `~0.0003`
+
+```bash
+pip install tensorflow numpy matplotlib
+```
+
+```bash
+pip install tensorflow numpy matplotlib
+```
